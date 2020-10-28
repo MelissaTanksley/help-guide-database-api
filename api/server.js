@@ -4,12 +4,11 @@ const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
 const knexSessionStore = require('connect-session-knex')(session);
-const app = express();
+const server = express();
 
 const tipsRouter = require('../routers/tipsRouter.js');
 const guidesRouter = require('../routers/guidesRouter.js');
 
-// const server = express();
 
 const sessionConfig = {
     name: 'auth',
@@ -32,25 +31,25 @@ const sessionConfig = {
     )
 };
 
-// server.use(helmet());
-// server.use(express.json());
-// server.use(cors());
 
-app.use(helmet());
-app.use(express.json());
-app.use(cors());
+server.use(helmet());
+server.use(express.json());
+server.use(cors());
 
-// server.use(session(sessionConfig));
 
-app.use(session(sessionConfig));
+server.use(session(sessionConfig));
 
-// server.use('/api/tips', tipsRouter);
-// server.use('/api/guides', guidesRouter);
+server.use('/api/tips', tipsRouter);
+server.use('/api/guides', guidesRouter);
 
-app.use('/api/tips', tipsRouter);
-app.use('/api/guides', guidesRouter);
+server.use(express.static('public'));
 
-app.use(express.static('public'));
+server. get('/', (req, res) => {
+    res.send(`
+        <h2>Help Guide Database API</h2>
+        <p>Welcome to Help Guide Database API</p>
+    `)
+})
 
 // server.use('/', (req, res) => {
 //     res.send(`
@@ -58,4 +57,4 @@ app.use(express.static('public'));
 //     `);
 //   });
 
-module.exports = app;
+module.exports = server;
